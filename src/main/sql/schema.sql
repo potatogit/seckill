@@ -37,3 +37,7 @@ CREATE TABLE success_killed(
 )ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='秒杀成功明细表';
 
   -- SHOW CREATE TABLE seckill;#显示表的创建信息
+
+INSERT into seckill(name,number,start_time,end_time)
+VALUES
+  ('[2018款] Macbook Air',100,'2016-01-01 00:00:00','2019-01-02 00:00:00');

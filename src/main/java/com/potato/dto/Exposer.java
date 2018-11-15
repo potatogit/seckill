@@ -23,7 +23,8 @@ public class Exposer {
 
     private String md5;
 
-    public Exposer(boolean exposed, long now, long start, long end) {
+    public Exposer(boolean exposed, long seckillId, long now, long start, long end) {
+        this.seckillId = seckillId;
         this.exposed = exposed;
         this.now = now;
         this.start = start;
@@ -36,8 +37,18 @@ public class Exposer {
         this.md5 = md5;
     }
 
-    public Exposer(boolean exposed, long seckillId) {
+    @Override public String toString() {
+        return "Exposer{" +
+                "exposed=" + exposed +
+                ", seckillId=" + seckillId +
+                ", now=" + now +
+                ", start=" + start +
+                ", end=" + end +
+                ", md5='" + md5 + '\'' +
+                '}';
+    }
 
+    public Exposer(boolean exposed, long seckillId) {
         this.exposed = exposed;
         this.seckillId = seckillId;
     }

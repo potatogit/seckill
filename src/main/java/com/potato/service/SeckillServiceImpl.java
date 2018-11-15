@@ -59,7 +59,7 @@ public class SeckillServiceImpl implements SeckillService {
             String md5 = getMd5(seckillId);
             return new Exposer(true, seckillId, md5);
         } else {
-            return new Exposer(false, seckillId);
+            return new Exposer(false, seckillId, curTime, startTime, endTime);
         }
     }
 
@@ -78,7 +78,7 @@ public class SeckillServiceImpl implements SeckillService {
      */
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) throws SeckillException {
         try{
-            if (md5 == null || md5.isEmpty() || md5.equals(getMd5(seckillId))) {
+            if (md5 == null || md5.isEmpty() || !md5.equals(getMd5(seckillId))) {
                 throw new SeckillException("verification fail");
             } else {
                 Date curTime = new Date();

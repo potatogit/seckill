@@ -2,7 +2,7 @@
 
 -- 创建数据库
 CREATE DATABASE seckill;
--- 使用数据库
+-- 使用数据库 因为应用行级锁，所以选INNODB引擎
 use seckill;
 CREATE TABLE seckill(
   `seckill_id` BIGINT NOT NUll AUTO_INCREMENT COMMENT '商品库存ID',

@@ -7,6 +7,8 @@ import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import com.potato.Exception.RepeatSeckillException;
@@ -22,6 +24,7 @@ import com.potato.entity.SuccessKilled;
 import enums.SeckillStatEnum;
 
 @Slf4j
+@Service
 public class SeckillServiceImpl implements SeckillService {
 
     private SeckillDao seckillDao;
@@ -66,7 +69,14 @@ public class SeckillServiceImpl implements SeckillService {
         return md5;
     }
 
-    @Override public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) throws SeckillException {
+    @Override
+    @Transactional
+    /**
+     * 1.约定一致风格
+     * 2.保证事务方法执行时间尽可能短,不要穿插RPC/HTTP请求
+     *
+     */
+    public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) throws SeckillException {
         try{
             if (md5 == null || md5.isEmpty() || md5.equals(getMd5(seckillId))) {
                 throw new SeckillException("verification fail");

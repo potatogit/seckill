@@ -10,7 +10,7 @@
     1.配置数据库相关参数-->
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
-    <!--2.数据库连接池-->
+    <!--2.数据库连接池 为了满足高并发的场景而做的配置-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <!--配置连接池属性-->
         <property name="driverClass" value="${jdbc.driver}" />

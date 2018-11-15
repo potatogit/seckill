@@ -3,6 +3,8 @@ package com.potato.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.potato.entity.Seckill;
 
 public interface SeckillDao {
@@ -12,7 +14,7 @@ public interface SeckillDao {
      * @param killTime
      * @return 如果影响行数>1，表示更新库存的记录行数
      */
-    int reduceNumber(long seckillId, Date killTime);
+    int reduceNumber(@Param("seckillId") long seckillId, @Param("killTime") Date killTime);
 
     /**
      * 根据id查询秒杀的商品信息
@@ -27,6 +29,6 @@ public interface SeckillDao {
      * @param limit
      * @return
      */
-    List<Seckill> queryAll(int off,int limit);
+    List<Seckill> queryAll(@Param(value = "offset") int off,@Param(value = "limit") int limit);
 
 }

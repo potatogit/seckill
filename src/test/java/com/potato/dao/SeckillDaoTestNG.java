@@ -2,7 +2,6 @@ package com.potato.dao;
 
 import static org.testng.Assert.*;
 
-import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
 

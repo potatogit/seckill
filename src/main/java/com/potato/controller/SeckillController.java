@@ -78,7 +78,7 @@ public class SeckillController {
 			result =  new SeckillResult<>(true, seckillExecution);
 		} catch (RepeatSeckillException e1) {
 			seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.REPEAT_KILL);
-			result = new SeckillResult<>(false, seckillExecution);
+			result = new SeckillResult<>(true, seckillExecution);
 		} catch (SeckillCloseException e2) {
 			seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.END);
 			result = new SeckillResult<>(false, seckillExecution);

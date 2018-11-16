@@ -32,5 +32,5 @@
     </bean>
 
     <!--4:扫描web相关的controller-->
-    <context:component-scan base-package="com.potato.web"/>
+    <context:component-scan base-package="com.potato.controller"/>
 </beans>

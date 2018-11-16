@@ -41,3 +41,7 @@ CREATE TABLE success_killed(
 INSERT into seckill(name,number,start_time,end_time)
 VALUES
   ('[2018款] Macbook Air',100,'2016-01-01 00:00:00','2019-01-02 00:00:00');
+
+INSERT into seckill(name,number,start_time,end_time)
+VALUES
+  ('[2018款] Apple Watch',100,'2019-01-01 00:00:00','2019-01-01 12:00:00');

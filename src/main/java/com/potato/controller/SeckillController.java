@@ -2,7 +2,6 @@ package com.potato.controller;
 
 import com.potato.Exception.RepeatSeckillException;
 import com.potato.Exception.SeckillCloseException;
-import com.potato.Exception.SeckillException;
 import com.potato.dto.Exposer;
 import com.potato.dto.SeckillExecution;
 import com.potato.dto.SeckillResult;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +25,7 @@ public class SeckillController {
 	@Autowired
 	private SeckillService seckillService;
 
-	@RequestMapping(name = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model) {
 		List<Seckill> seckillList = seckillService.getSeckillList();
 		model.addAttribute("list", seckillList);
@@ -48,7 +46,7 @@ public class SeckillController {
 		return "detail";
 	}
 
-	@RequestMapping(value = "/{seckillId}/exposer", method = RequestMethod.POST,
+	@RequestMapping(value = "/{seckillId}/exposer", method = RequestMethod.GET,
 	produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public SeckillResult<Exposer> expose(@PathVariable("seckillId") Long seckillId) {
@@ -63,7 +61,7 @@ public class SeckillController {
 		return result;
 	}
 
-	@RequestMapping(name = "/{seckillId}/{md5}/execution", method = RequestMethod.POST,
+	@RequestMapping(value = "/{seckillId}/{md5}/execution", method = RequestMethod.POST,
 	produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
@@ -92,10 +90,10 @@ public class SeckillController {
 		return result;
 	}
 
-	@RequestMapping(name = "/time/now", method = RequestMethod.GET,
-			produces="application/json;charset=UTF-8")
+	@RequestMapping(value = "/time/now", method = RequestMethod.GET)
 	@ResponseBody
 	public SeckillResult<Long> time() {
 		return new SeckillResult<>(true, System.currentTimeMillis());
 	}
+
 }

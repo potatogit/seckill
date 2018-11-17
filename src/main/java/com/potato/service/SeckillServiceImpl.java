@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import com.potato.dao.cache.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,15 @@ public class SeckillServiceImpl implements SeckillService {
 
     private SuccessKilledDao successKilledDao;
 
+    private RedisDao redisDao;
+
     private static final String salt = "fj;adkjf098uf -98-(&*Y*p9y8fiausyf9*";
 
     @Autowired
-    public SeckillServiceImpl(SeckillDao seckillDao, SuccessKilledDao successKilledDao) {
+    public SeckillServiceImpl(SeckillDao seckillDao, SuccessKilledDao successKilledDao, RedisDao redisDao) {
         this.seckillDao = seckillDao;
         this.successKilledDao = successKilledDao;
+        this.redisDao = redisDao;
     }
 
     @Override public List<Seckill> getSeckillList() {
@@ -48,10 +52,14 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     @Override public Exposer exposeSeckillUrl(long seckillId) {
-        Seckill seckill = seckillDao.queryById(seckillId);
-        if(Objects.isNull(seckill)) {
-            return new Exposer(false, seckillId);
-        }
+	    Seckill seckill = redisDao.getSeckill(seckillId);
+	    if(seckill == null) {
+		    seckill = seckillDao.queryById(seckillId);
+		    if(Objects.isNull(seckill)) {
+			    return new Exposer(false, seckillId);
+		    }
+	        redisDao.putSeckill(seckill);
+	    }
         long curTime = System.currentTimeMillis();
         long startTime = seckill.getStartTime().getTime();
         long endTime = seckill.getEndTime().getTime();
@@ -88,7 +96,7 @@ public class SeckillServiceImpl implements SeckillService {
                 } else {
                     int insertedNum = successKilledDao.insertSuccessKilled(seckillId, userPhone);
                     if (insertedNum <= 0) {
-                        throw new RepeatSeckillException("seckilll repeated!");
+                        throw new RepeatSeckillException("Seckilll repeated!");
                     } else {
                         SuccessKilled successKilled = successKilledDao.queryByIdWithSeckill(seckillId, userPhone);
                         return new SeckillExecution(seckillId, SeckillStatEnum.SUCCESS, successKilled);

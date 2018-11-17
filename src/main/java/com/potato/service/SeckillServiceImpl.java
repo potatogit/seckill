@@ -89,19 +89,19 @@ public class SeckillServiceImpl implements SeckillService {
             if (md5 == null || md5.isEmpty() || !md5.equals(getMd5(seckillId))) {
                 throw new SeckillException("verification fail");
             } else {
-                Date curTime = new Date();
-                int updateRowNum = seckillDao.reduceNumber(seckillId, curTime);
-                if (updateRowNum <= 0) {
-                    throw new SeckillCloseException("Seckill is over!");
-                } else {
-                    int insertedNum = successKilledDao.insertSuccessKilled(seckillId, userPhone);
-                    if (insertedNum <= 0) {
-                        throw new RepeatSeckillException("Seckilll repeated!");
-                    } else {
-                        SuccessKilled successKilled = successKilledDao.queryByIdWithSeckill(seckillId, userPhone);
-                        return new SeckillExecution(seckillId, SeckillStatEnum.SUCCESS, successKilled);
-                    }
-                }
+	            int insertedNum = successKilledDao.insertSuccessKilled(seckillId, userPhone);// 这句并发量不是很大
+	            if (insertedNum <= 0) {
+		            throw new RepeatSeckillException("Seckilll repeated!");
+	            } else {
+		            SuccessKilled successKilled = successKilledDao.queryByIdWithSeckill(seckillId, userPhone);
+		            Date curTime = new Date();
+		            int updateRowNum = seckillDao.reduceNumber(seckillId, curTime);// 这句是高并发,拿到行级锁
+		            if (updateRowNum <= 0) {
+			            throw new SeckillCloseException("Seckill is over!");
+		            } else {
+			            return new SeckillExecution(seckillId, SeckillStatEnum.SUCCESS, successKilled); // 这个时候进行commit，释放行级锁. 尽量让加锁到释放锁的时间短一些
+		            }
+	            }
             }
         } catch (SeckillCloseException e1) {
             throw e1;

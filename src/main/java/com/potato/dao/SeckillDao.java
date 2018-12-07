@@ -31,4 +31,10 @@ public interface SeckillDao {
      */
     List<Seckill> queryAll(@Param(value = "offset") int off,@Param(value = "limit") int limit);
 
+    /**
+     * 使用存储过程秒杀
+     * @param paramMap
+     */
+    void killByProcedure(Map<String, Object> paramMap);
+
 }
